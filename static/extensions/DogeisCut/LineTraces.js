@@ -10,8 +10,9 @@
         throw new Error('\'Line Traces\' must run unsandboxed!');
     }
 
-    const lastTraceData = []
-    const traceFilter = []
+    const lastTraceData = [];
+    const traceFilter = [];
+    let filterType = 'blacklist';
 
     class LineTraces {
         getInfo() {
