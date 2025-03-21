@@ -12,6 +12,25 @@
         throw new Error('\'UndoRedo\' must run unsandboxed!');
     }
 
+    const ActionMergeModes = {
+        DISABLED: "disabled",
+        MERGE_ONLY_ENDS: "merge only ends",
+        MERGE: "merge"
+    }
+    const BackwardsUndoOperationModes = {
+        ENABLED: "true",
+        DISABLED: "false"
+    }
+
+    var history = [];
+    var current_action = {};
+    var current_step = -1;
+    var action_merge_mode = ActionMergeModes.MERGE
+    var backwards_undo_operations_mode = BackwardsUndoOperationModes.ENABLED
+
+    const vm = Scratch.vm
+    const runtime = vm.runtime
+
     class UndoRedo {
         getInfo() {
             return {
@@ -79,7 +98,8 @@
                         arguments: {
                             MODE: {
                                 type: Scratch.ArgumentType.STRING,
-                                menu: 'actionmergemodes'
+                                menu: 'actionmergemodes',
+                                defaultValue: ActionMergeModes.MERGE
                             },
                         }
                     },
@@ -111,15 +131,15 @@
                         items: [
                             {
                                 text: 'disabled',
-                                value: 'disabled',
+                                value: ActionMergeModes.DISABLED,
                             },
                             {
                                 text: 'merge only ends',
-                                value: 'onlyends',
+                                value: ActionMergeModes.MERGE_ONLY_ENDS,
                             },
                             {
                                 text: 'merge',
-                                value: 'merge',
+                                value: ActionMergeModes.MERGE,
                             },
                         ]
                     },
@@ -128,16 +148,62 @@
                         items: [
                             {
                                 text: 'true',
-                                value: 'true',
+                                value: BackwardsUndoOperationModes.ENABLED,
                             },
                             {
                                 text: 'false',
-                                value: 'false',
+                                value: BackwardsUndoOperationModes.DISABLED,
                             },
                         ]
                     }
                 }
             }
+        }
+
+        createactionnamed(args, util) {
+            current_action = {
+                name: args.ACTION
+            }
+        }
+
+        addasdodefinition(args, util) {
+            current_action.doStartId = util.thread.blockContainer.getBranch(util.thread.peekStack(), 0)
+        }
+
+        addasundodefinition(args, util) {
+            current_action.undoStartId = util.thread.blockContainer.getBranch(util.thread.peekStack(), 0)
+        }
+
+        commitaction(args, util) {
+            if (Object.keys(current_action).length != 0) {
+                history.push(current_action)
+                current_step += 1
+                runtime._pushThread(current_action.doStartId, util.target)
+                current_action = {}
+            }
+        }
+
+        undo(args, util) {
+            if (current_step >= 0) {
+                runtime._pushThread(history[current_step].undoStartId, util.target)
+                current_step -= 1
+            }
+        }
+
+        redo(args, util) {
+            if (current_step+1 < history.length) {
+                current_step += 1
+                runtime._pushThread(history[current_step].doStartId, util.target)
+            }
+        }
+
+        historycount(args, util) {
+            return history.length;
+        }
+
+        clearhistory(args, util) {
+            current_step = -1;
+            history = [];
         }
     }
 
