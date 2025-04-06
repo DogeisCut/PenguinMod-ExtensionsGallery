@@ -14,7 +14,7 @@
         throw new Error('\'MetaBlocks\' must run unsandboxed!');
     }
 
-    class MetaBlocks {
+    class Extension {
         getInfo() {
             return {
                 id: 'dogeiscutmetablocks',
@@ -22,11 +22,29 @@
                 color1: "#907f7f",
                 blocks: [
                     {
+                        blockType: Scratch.BlockType.BUTTON,
+                        text: 'Unshadow All Dropdowns in Sprite',
+                        func: 'unshadowall'
+                    },
+                    {
+                        blockType: Scratch.BlockType.BUTTON,
+                        text: 'Shadow All Dropdowns in Sprite',
+                        func: 'shadowall'
+                    },
+                    {
                         opcode: 'getscriptasjson',
                         text: ['get script', 'as json'],
                         blockType: Scratch.BlockType.REPORTER,
                         blockShape: Scratch.BlockShape.SQUARE,
                         disableMonitor: true,
+                        branches: [
+                            {}
+                        ],
+                    },
+                    {
+                        opcode: 'logscripttoconsole',
+                        text: ['log script', 'to console'],
+                        blockType: Scratch.BlockType.COMMAND,
                         branches: [
                             {}
                         ],
@@ -193,6 +211,10 @@
         getscriptasjson(args, util) {
             return JSON.stringify(this.getBlockContents(util));
         }
+
+        logscripttoconsole(args, util) {
+            console.log(util.target.blocks.getBlock(util.thread.blockContainer.getBranch(util.thread.peekStack(), 0)));
+        }
         
         getscriptblockinfo(args, util) {
         }
@@ -208,7 +230,23 @@
         asreporter(args, util) {
             
         }
+
+        shadowallbool(bool) {
+            Object.values(Scratch.vm.editingTarget.blocks._blocks).forEach(block => {
+                if ((block.opcode.indexOf("menu") === -1)) return;
+                block.shadow = bool
+            });
+            Scratch.vm.refreshWorkspace()
+        }
+
+        shadowall() {
+            this.shadowallbool(true)
+        }
+
+        unshadowall() {
+            this.shadowallbool(false)
+        }
     }
 
-    Scratch.extensions.register(new MetaBlocks());
+    Scratch.extensions.register(new Extension());
 })(Scratch);
