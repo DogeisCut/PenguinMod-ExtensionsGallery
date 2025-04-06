@@ -107,12 +107,36 @@
                         opcode: "setbackwardsundooperationsmode",
                         text: 'set backwards undo operations mode to [MODE]',
                         blockType: Scratch.BlockType.COMMAND,
+                        hideFromPalette: true,
                         arguments: {
                             MODE: {
-                                type: Scratch.ArgumentType.STRING,
-                                menu: 'truefalse'
+                                type: Scratch.ArgumentType.BOOLEAN
                             },
                         }
+                    },
+                    {
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        opcode: 'menu_boolean',
+                        text: '[BOOL]',
+                        hideFromPalette: true,
+                        disableMonitor: true,
+                        arguments: {
+                            BOOL: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'boolean',
+                            }
+                        },
+                    },
+                    {
+                        blockType: Scratch.BlockType.XML,
+                        xml: `
+                        <block type="dogeiscutundoredo_setbackwardsundooperationsmode">
+                            <value name="MODE">
+                                <shadow type="dogeiscutundoredo_menu_boolean">
+                                    <field name="BOOL">true</field>
+                                </shadow>
+                            </value>
+                        </block>`
                     },
                     {
                         opcode: "actionmergemode",
@@ -143,17 +167,11 @@
                             },
                         ]
                     },
-                    truefalse: {
-                        acceptReporters: true,
+                    boolean: {
+                        acceptReporters: false,
                         items: [
-                            {
-                                text: 'true',
-                                value: BackwardsUndoOperationModes.ENABLED,
-                            },
-                            {
-                                text: 'false',
-                                value: BackwardsUndoOperationModes.DISABLED,
-                            },
+                            { text: Scratch.translate('true'), value: 'true' },
+                            { text: Scratch.translate('false'), value: 'false' },
                         ]
                     }
                 }
@@ -204,6 +222,10 @@
         clearhistory(args, util) {
             current_step = -1;
             history = [];
+        }
+
+        menu_boolean({BOOL}) {
+            return Scratch.Cast.toBoolean(BOOL);
         }
     }
 
