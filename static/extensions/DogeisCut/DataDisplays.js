@@ -208,17 +208,28 @@
                 return DisplayTypes.ERROR.toReporterContent(this.data, { error: Cast.toString(e) });
             }
         }
+
+        static toDataDisplaysType(data) {
+            if (data instanceof dogeiscutDataDisplays.Type) {
+                return data;
+            }
+            return new dogeiscutDataDisplays.Type(Cast.toString(data));
+        }
     }
 
     const dogeiscutDataDisplays = {
         Type: dogeiscutDataDisplaysType,
         Block: {
-            blockType: Scratch.BlockType.REPORTER,
-            //forceOutputType: "",
-            disableMonitor: true
+            STYLED: {
+                blockType: Scratch.BlockType.REPORTER,
+                forceOutputType: "Data Display Styled",
+                disableMonitor: true
+            }
         },
         Argument: {
-            //check: [""]
+            STYLED: {
+                check: ["Data Display Styled"]
+            }
         }
     }
 
@@ -256,7 +267,7 @@
                     {
                         opcode: 'astext',
                         text: '[DATA] as text',
-                        ...dogeiscutDataDisplays.Block,
+                        blockType: Scratch.BlockType.REPORTER,
                         arguments: {
                             DATA: {
                                 type: Scratch.ArgumentType.STRING,
@@ -267,34 +278,150 @@
                     {
                         opcode: 'asimage',
                         text: '[DATA] as image',
-                        ...dogeiscutDataDisplays.Block,
+                        blockType: Scratch.BlockType.REPORTER,
                         arguments: {
                             DATA: {
                                 type: Scratch.ArgumentType.STRING,
-                                defaultValue: `data:image/png;base64,...`
+                                menu: 'images'
                             }
                         }
                     },
+                    '---',
                     {
                         opcode: 'asstyled',
-                        text: '[DATA] as styled text with color [COLOR] and size [SIZE]',
-                        ...dogeiscutDataDisplays.Block,
+                        text: '[DATA] as styleable',
+                        ...dogeiscutDataDisplays.Block.STYLED,
                         arguments: {
                             DATA: {
                                 type: Scratch.ArgumentType.STRING,
                                 defaultValue: `styled text~`
                             },
+                        }
+                    },
+                    {
+                        opcode: 'stylededitcolor',
+                        text: 'set color of [STYLE] to [COLOR]',
+                        ...dogeiscutDataDisplays.Block.STYLED,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.STYLED,
                             COLOR: {
                                 type: Scratch.ArgumentType.STRING,
-                                defaultValue: `black`
+                                defaultValue: `cyan`
                             },
+                        }
+                    },
+                    {
+                        opcode: 'stylededitsize',
+                        text: 'set size of [STYLE] to [SIZE]',
+                        ...dogeiscutDataDisplays.Block.STYLED,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.STYLED,
                             SIZE: {
                                 type: Scratch.ArgumentType.STRING,
-                                defaultValue: `16px`
-                            }
+                                defaultValue: `32px`
+                            },
                         }
+                    },
+                    {
+                        opcode: 'stylededitfontweight',
+                        text: 'set font weight of [STYLE] to [WEIGHT]',
+                        ...dogeiscutDataDisplays.Block.STYLED,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.STYLED,
+                            WEIGHT: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `bold`
+                            },
+                        }
+                    },
+                    {
+                        opcode: 'stylededitfontstyle',
+                        text: 'set font style of [STYLE] to [STYLETYPE]',
+                        ...dogeiscutDataDisplays.Block.STYLED,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.STYLED,
+                            STYLETYPE: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `italic`
+                            },
+                        }
+                    },
+                    {
+                        opcode: 'stylededitbackground',
+                        text: 'set background color of [STYLE] to [COLOR]',
+                        ...dogeiscutDataDisplays.Block.STYLED,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.STYLED,
+                            COLOR: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `yellow`
+                            },
+                        }
+                    },
+                    {
+                        opcode: 'stylededitpadding',
+                        text: 'set padding of [STYLE] to [PADDING]',
+                        ...dogeiscutDataDisplays.Block.STYLED,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.STYLED,
+                            PADDING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `10px`
+                            },
+                        }
+                    },
+                    {
+                        opcode: 'stylededitmargin',
+                        text: 'set margin of [STYLE] to [MARGIN]',
+                        ...dogeiscutDataDisplays.Block.STYLED,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.STYLED,
+                            MARGIN: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `5px`
+                            },
+                        }
+                    },
+                    {
+                        opcode: 'stylededitfontfamily',
+                        text: 'set font family of [STYLE] to [FONT]',
+                        hideFromPalette: true,
+                        ...dogeiscutDataDisplays.Block.STYLED,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.STYLED,
+                            FONT: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `Arial`
+                            },
+                        }
+                    },
+                    {
+                        blockType: Scratch.BlockType.XML,
+                        xml:
+                        `<block type="dogeiscutDataDisplays_stylededitfontfamily" >
+                            <value name="FONT">
+                                <shadow type="pen_menu_FONT" >
+                                    <field name="FONT">Arial</field>
+                                </shadow>
+                            </value>
+                        </block>`  
+                    },
+                ],
+                menus: {
+                    images: {
+                        isTypeable: true,
+                        items: [
+                            {
+                                text: 'Smiley Face',
+                                value: `Smiley Face`
+                            },
+                            {
+                                text: 'Any DataURI',
+                                value: `data:image/png;base64, ...`
+                            }
+                        ]
                     }
-                ]
+                }
             }
         }
 
@@ -305,18 +432,77 @@
         }
 
         asimage({ DATA }) {
+            if (DATA === "Smiley Face") {
+                return new dogeiscutDataDisplays.Type(
+                    `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuNBLfpoMAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAADHcBAOgDAAAMdwEA6AMAAFBhaW50Lk5FVCA1LjEuNAADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAADQ2WABsfAzzAAAAGVJREFUKFNtj8sNgDAMQx3m4MI4DMJUDMIq3LiwR7DdD0XiSUmcTxM1UMkDaXHbIza4Z+fmIkUu2jhUX6Y5GWk935GTJikVOmMemsJM9XNCeEOsdGp87794C8NotVZ+IVqhUb4JPM6EOAxRw9XmAAAAAElFTkSuQmCC`,
+                    DisplayTypes.IMAGE
+                )
+            }
             return new dogeiscutDataDisplays.Type(Cast.toString(DATA), DisplayTypes.IMAGE)
         }
 
-        asstyled({ DATA, COLOR, SIZE }) {
+        asstyled({ DATA }) {
             return new dogeiscutDataDisplays.Type(
             Cast.toString(DATA),
             DisplayTypes.STYLED,
-            {
-                color: Cast.toString(COLOR),
-                fontSize: Cast.toString(SIZE)
-            }
+            {}
             );
+        }
+
+        stylededitcolor({ STYLE, COLOR }) {
+            STYLE = dogeiscutDataDisplays.Type.toDataDisplaysType(STYLE)
+            STYLE.displayType = DisplayTypes.STYLED
+            STYLE.extra.color = Cast.toString(COLOR)
+            return STYLE
+        }
+
+        stylededitsize({ STYLE, SIZE }) {
+            STYLE = dogeiscutDataDisplays.Type.toDataDisplaysType(STYLE)
+            STYLE.displayType = DisplayTypes.STYLED
+            STYLE.extra.fontSize = Cast.toString(SIZE)
+            return STYLE
+        }
+
+        stylededitfontweight({ STYLE, WEIGHT }) {
+            STYLE = dogeiscutDataDisplays.Type.toDataDisplaysType(STYLE);
+            STYLE.displayType = DisplayTypes.STYLED;
+            STYLE.extra.fontWeight = Cast.toString(WEIGHT);
+            return STYLE;
+        }
+
+        stylededitfontstyle({ STYLE, STYLETYPE }) {
+            STYLE = dogeiscutDataDisplays.Type.toDataDisplaysType(STYLE);
+            STYLE.displayType = DisplayTypes.STYLED;
+            STYLE.extra.fontStyle = Cast.toString(STYLETYPE);
+            return STYLE;
+        }
+
+        stylededitbackground({ STYLE, COLOR }) {
+            STYLE = dogeiscutDataDisplays.Type.toDataDisplaysType(STYLE);
+            STYLE.displayType = DisplayTypes.STYLED;
+            STYLE.extra.backgroundColor = Cast.toString(COLOR);
+            return STYLE;
+        }
+
+        stylededitpadding({ STYLE, PADDING }) {
+            STYLE = dogeiscutDataDisplays.Type.toDataDisplaysType(STYLE);
+            STYLE.displayType = DisplayTypes.STYLED;
+            STYLE.extra.padding = Cast.toString(PADDING);
+            return STYLE;
+        }
+
+        stylededitmargin({ STYLE, MARGIN }) {
+            STYLE = dogeiscutDataDisplays.Type.toDataDisplaysType(STYLE);
+            STYLE.displayType = DisplayTypes.STYLED;
+            STYLE.extra.margin = Cast.toString(MARGIN);
+            return STYLE;
+        }
+
+        stylededitfontfamily({ STYLE, FONT }) {
+            STYLE = dogeiscutDataDisplays.Type.toDataDisplaysType(STYLE);
+            STYLE.displayType = DisplayTypes.STYLED;
+            STYLE.extra.fontFamily = Cast.toString(FONT);
+            return STYLE;
         }
     }
 
