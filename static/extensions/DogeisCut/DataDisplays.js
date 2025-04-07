@@ -3,6 +3,8 @@
 // Description: Fun ways to report and monitor data in your projects!
 // By: dogeiscut <https://scratch.mit.edu/users/dogeiscut/>
 
+// TODO: fix monitors not always updating
+
 (function(Scratch) {
     'use strict';
 
@@ -160,6 +162,7 @@
                 root.style.backgroundColor = extra.backgroundColor || 'transparent';
                 root.style.padding = extra.padding || '0';
                 root.style.margin = extra.margin || '0';
+                root.style.fontFamily = extra.fontFamily || 'inherit';
 
                 const content = span(Cast.toString(data));
                 root.appendChild(content);
