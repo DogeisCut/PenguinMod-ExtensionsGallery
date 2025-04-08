@@ -224,12 +224,20 @@
                 blockType: Scratch.BlockType.REPORTER,
                 forceOutputType: "Data Display Styled",
                 disableMonitor: true
-            }
+            },
+            IMAGE: {
+                blockType: Scratch.BlockType.REPORTER,
+                forceOutputType: "Data Display Image",
+                disableMonitor: true
+            },
         },
         Argument: {
             STYLED: {
                 check: ["Data Display Styled"]
-            }
+            },
+            IMAGE: {
+                check: ["Data Display Image"]
+            },
         }
     }
 
@@ -267,6 +275,7 @@
                     {
                         opcode: 'astext',
                         text: '[DATA] as text',
+                        hideFromPalette: true, // this is a useless block...
                         blockType: Scratch.BlockType.REPORTER,
                         arguments: {
                             DATA: {
@@ -275,6 +284,7 @@
                             }
                         }
                     },
+                    //'---',
                     {
                         opcode: 'asimage',
                         text: '[DATA] as image',
@@ -284,6 +294,53 @@
                                 type: Scratch.ArgumentType.STRING,
                                 menu: 'images'
                             }
+                        }
+                    },
+                    {
+                        opcode: 'imageeditantialiasing',
+                        text: 'set anti-aliasing on [IMAGE] to [BOOL]',
+                        hideFromPalette: true,
+                        ...dogeiscutDataDisplays.Block.IMAGE,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.IMAGE,
+                            BOOL: {
+                                type: Scratch.ArgumentType.BOOLEAN
+                            }
+                        }
+                    },
+                    {
+                        blockType: Scratch.BlockType.XML,
+                        xml: `
+                        <block type="dogeiscutDataDisplays_imageeditantialiasing">
+                            <value name="BOOL">
+                                <shadow type="dogeiscutDataDisplays_menu_boolean">
+                                    <field name="BOOL">false</field>
+                                </shadow>
+                            </value>
+                        </block>`
+                    },
+                    {
+                        opcode: 'imageeditwidth',
+                        text: 'set width of [IMAGE] to [WIDTH]',
+                        ...dogeiscutDataDisplays.Block.IMAGE,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.IMAGE,
+                            WIDTH: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '150px'
+                            },
+                        }
+                    },
+                    {
+                        opcode: 'imageeditheight',
+                        text: 'set height of [IMAGE] to [HEIGHT]',
+                        ...dogeiscutDataDisplays.Block.IMAGE,
+                        arguments: {
+                            ...dogeiscutDataDisplays.Argument.IMAGE,
+                            HEIGHT: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: '150px'
+                            },
                         }
                     },
                     '---',
@@ -406,8 +463,28 @@
                             </value>
                         </block>`  
                     },
+                    {
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        opcode: 'menu_boolean',
+                        text: '[BOOL]',
+                        hideFromPalette: true,
+                        disableMonitor: true,
+                        arguments: {
+                            BOOL: {
+                                type: Scratch.ArgumentType.STRING,
+                                menu: 'boolean',
+                            }
+                        },
+                    },
                 ],
                 menus: {
+                    boolean: {
+                        acceptReporters: false,
+                        items: [
+                            { text: Scratch.translate('true'), value: 'true' },
+                            { text: Scratch.translate('false'), value: 'false' },
+                        ]
+                    },
                     images: {
                         isTypeable: true,
                         items: [
@@ -423,6 +500,12 @@
                     }
                 }
             }
+        }
+
+        /* menus */
+
+        menu_boolean({ BOOL }) {
+            return Scratch.Cast.toBoolean(BOOL);
         }
 
         /* blocks */
