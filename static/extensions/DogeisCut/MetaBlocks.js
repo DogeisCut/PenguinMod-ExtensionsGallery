@@ -35,7 +35,6 @@
                         opcode: 'getscriptasjson',
                         text: ['get script', 'as json'],
                         blockType: Scratch.BlockType.REPORTER,
-                        blockShape: Scratch.BlockShape.SQUARE,
                         disableMonitor: true,
                         branches: [
                             {}
@@ -55,7 +54,6 @@
                         opcode: 'getscriptblockinfo',
                         text: ['get script block info', 'as json'],
                         blockType: Scratch.BlockType.REPORTER,
-                        blockShape: Scratch.BlockShape.SQUARE,
                         hideFromPalette: true,
                         disableMonitor: true,
                         branches: [
