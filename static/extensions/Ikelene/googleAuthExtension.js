@@ -64,20 +64,24 @@ class GoogleAuthExtension {
                 },
             ],
             menus: {},
-            docsURI: 'https://ikelene.ca/api/googleAuthDocumentation',
         };
     }
 
     login() {
         const clientId = '382430967410-3svk456rj8ntlu3d3gd9oma09i96cpr9.apps.googleusercontent.com';
-        const redirectUri = 'https://ikelene.ca/api/googleLogin.php';
+        const redirectUri = 'https://ikelene.dev/google/googleLogin.php';
         const scope = 'profile email';
-        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&prompt=select_account`;
+
+        const sourceDomain = window.location.hostname;
+
+        const state = encodeURIComponent(JSON.stringify({ source: sourceDomain }));
+
+        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&prompt=select_account&state=${state}`;
 
         this.authWindow = window.open(authUrl, 'Google Login', 'width=500,height=600');
 
         window.addEventListener('message', (event) => {
-            if (event.origin === 'https://ikelene.ca') {
+            if (event.origin === 'https://ikelene.dev') {
                 const { accountName, fullName, profilePicture, userId, locale, emailVerified } = event.data;
                 this.accountName = accountName;
                 this.fullName = fullName;
@@ -103,7 +107,7 @@ class GoogleAuthExtension {
     }
 
     isLoginWindowOpen() {
-    return !!(this.authWindow && !this.authWindow.closed);
+        return !!(this.authWindow && !this.authWindow.closed);
     }
 
     getAccountName() {
