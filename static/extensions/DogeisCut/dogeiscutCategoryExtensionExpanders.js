@@ -755,7 +755,7 @@
         }
 
         regexPreset({ PRESET, FLAGS }, util) {
-            PATTERN = Cast.toString(PRESET)
+            const PATTERN = Cast.toString(PRESET)
             FLAGS = Cast.toString(FLAGS)
             return vm.dogeiscutRegularExpression.Type.toRegularExpression({ PATTERN, FLAGS })
         }
