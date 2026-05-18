@@ -7,6 +7,13 @@
 // - get (costume v) as svg xml: XML
 // - get (costume v) as array buffer: Array Buffer
 
+// Currently Supported Custom Types
+// - Arrays
+// - Objects
+// - Targets
+// - Vector
+// - Lambda
+
 (function(Scratch) {
     'use strict';
 
