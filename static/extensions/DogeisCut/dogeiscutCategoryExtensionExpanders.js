@@ -129,7 +129,7 @@
                         opcode: 'setBubbleOptionsToObject',
                         text: 'set bubble options to [OBJECT]',
                         arguments: {
-                            OBJECT: (vm.jwVector ? vm.jwVector.Argument : {})
+                            OBJECT: (vm.dogeiscutObject ? vm.dogeiscutObject.Argument : {})
                         },
                         extensions: ["colours_looks"],
                         hideFromPalette: !vm.dogeiscutObject,
@@ -171,7 +171,7 @@
                         opcode: 'setSpriteEffectsToObject',
                         text: 'set sprite effects to [OBJECT]',
                         arguments: {
-                            OBJECT: (vm.jwVector ? vm.jwVector.Argument : {})
+                            OBJECT: (vm.dogeiscutObject ? vm.dogeiscutObject.Argument : {})
                         },
                         extensions: ["colours_looks"],
                         hideFromPalette: !vm.dogeiscutObject,
