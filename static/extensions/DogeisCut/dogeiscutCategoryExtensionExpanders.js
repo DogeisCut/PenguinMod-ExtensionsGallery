@@ -14,6 +14,12 @@
 // - Vector
 // - Lambda
 
+// TODO
+// - make the blocks actually work
+// - hide sub categorys with no blocks
+// - add a message if there's no extensions added that have compat
+// - add help page or button of some sort for list of supported ext
+
 (function(Scratch) {
     'use strict';
 
