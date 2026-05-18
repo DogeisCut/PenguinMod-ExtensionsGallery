@@ -48,6 +48,12 @@
                 color1: "#f2f2f2",
                 blocks: [
                     {
+                        blockType: BlockType.BUTTON,
+                        text: 'DEBUG: add supported extensions',
+                        func: "addSupportedExtensions",
+                        hideFromPalette: false,
+                    },
+                    {
                         blockType: BlockType.LABEL,
                         text: 'Motion',
                     },
@@ -603,6 +609,18 @@
                     },
                 }
             }
+        }
+        
+        async addSupportedExtensions() {
+            if (!vm.jwArray) vm.extensionManager.loadExtensionIdSync('jwArray')
+            if (!vm.dogeiscutObject) await vm.extensionManager.loadExtensionURL("https://extensions.penguinmod.com/extensions/DogeisCut/dogeiscutObject.js")
+            if (!vm.jwTargets) vm.extensionManager.loadExtensionIdSync('jwTargets')
+            if (!vm.jwVector) vm.extensionManager.loadExtensionIdSync('jwVector')
+            if (!vm.jwLambda) vm.extensionManager.loadExtensionIdSync('jwLambda')
+            if (!vm.dogeiscutRegularExpression) await vm.extensionManager.loadExtensionURL("https://extensions.penguinmod.com/extensions/DogeisCut/dogeiscutRegularExpressions.js")
+            vm.runtime.requestBlocksUpdate()
+            vm.runtime.requestToolboxExtensionsUpdate()
+            vm.emitWorkspaceUpdate()
         }
 
         transformMatrix({  }, util) {
