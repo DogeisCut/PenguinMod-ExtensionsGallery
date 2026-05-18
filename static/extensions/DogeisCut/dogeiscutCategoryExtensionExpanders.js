@@ -6,8 +6,6 @@
 // Future Ideas
 // - get (costume: string v) as svg xml: XML - only lists vector costumes, invalid input returns blank XML
 // - get (costume: string v) as array buffer: Array Buffer - only lists bitmap costumes, invalid input returns blank buffer
-// - (array: Array) as vector: Vector - operator
-// - (object: Object) as vector: Vector - operator
 
 // Currently Supported Custom Types
 // - Arrays
@@ -294,6 +292,27 @@
                         extensions: ["colours_operators"],
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
+                    },
+                    ...(vm.jwArray ? ['---'] : []),
+                    {
+                        opcode: 'arrayToVector',
+                        text: '[ARRAY]',
+                        arguments: {
+                            ARRAY: (vm.jwArray ? vm.jwArray.Argument : {})
+                        },
+                        extensions: ["colours_operators"],
+                        hideFromPalette: !(vm.jwVector && vm.jwArray),
+                        ...(vm.jwVector ? vm.jwVector.Block : {}),
+                    },
+                    {
+                        opcode: 'objectToVector',
+                        text: '[OBJECT]',
+                        arguments: {
+                            OBJECT: (vm.dogeiscutObject ? vm.dogeiscutObject.Argument : {})
+                        },
+                        extensions: ["colours_operators"],
+                        hideFromPalette: !(vm.jwVector && vm.dogeiscutObject),
+                        ...(vm.jwVector ? vm.jwVector.Block : {}),
                     },
                     {
                         blockType: BlockType.LABEL,
