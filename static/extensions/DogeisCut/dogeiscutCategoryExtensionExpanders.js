@@ -467,7 +467,7 @@
                     },
                     {
                         opcode: 'branches',
-                        text: 'branches',
+                        text: '⚠ branches',
                         extensions: ["colours_more"],
                         hideFromPalette: !(vm.jwArray && vm.jwLambda),
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
@@ -478,7 +478,7 @@
                     },
                     {
                         opcode: 'fontNames',
-                        text: 'font names',
+                        text: '⚠ font names',
                         extensions: ["colours_pen"],
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
