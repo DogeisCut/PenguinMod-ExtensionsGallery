@@ -377,7 +377,7 @@
                     ...(vm.jwVector ? ['---'] : []),
                     {
                         opcode: 'vectorPreset',
-                        text: '⚠ vector for [PRESET]',
+                        text: 'vector for [PRESET]',
                         arguments: {
                             PRESET: {
                                 menu: 'vectorPresets',
@@ -767,12 +767,27 @@
             T = Math.max(0, Math.min(1, T));
             const resultX = A.x + T * (B.x - A.x);
             const resultY = A.y + T * (B.y - A.y);
-            return vm.jwVector.Type.toVector([ resultX, resultY ]);
+            return new vm.jwVector.Type(resultX, resultY);
         }
 
         vectorPreset({ PRESET }, util) {
             PRESET = Cast.toString(PRESET)
-            throw new Error("Not Implemented: Block functionality incomplete or non-existant")
+            switch (PRESET) {
+                case "one":
+                    return new vm.jwVector.Type(1, 1)
+                case "infinity":
+                    return new vm.jwVector.Type(Infinity, Infinity)
+                case "left":
+                    return new vm.jwVector.Type(-1, 0)
+                case "right":
+                    return new vm.jwVector.Type(1, 0)
+                case "up":
+                    return new vm.jwVector.Type(0, 1)
+                case "down":
+                    return new vm.jwVector.Type(0, -1)
+                default:
+                    return new vm.jwVector.Type(0, 0)
+            }
         }
 
         regexPreset({ PRESET, FLAGS }, util) {
