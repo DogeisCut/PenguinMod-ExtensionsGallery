@@ -466,7 +466,7 @@
                     },
                     {
                         opcode: 'arguments',
-                        text: 'arguments',
+                        text: '⚠ arguments',
                         extensions: ["colours_more"],
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
