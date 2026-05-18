@@ -361,7 +361,7 @@
                     ...((vm.jwVector && vm.dogeiscutObject) ? ['---'] : []),
                     {
                         opcode: 'interpolateVectorToVectorByT',
-                        text: '⚠ interpolate [A] to [B] by [T]',
+                        text: 'interpolate [A] to [B] by [T]',
                         arguments: {
                             A: (vm.jwVector ? vm.jwVector.Argument : {}),
                             B: (vm.jwVector ? vm.jwVector.Argument : {}),
@@ -764,7 +764,10 @@
             A = vm.jwVector.Type.toVector(A)
             B = vm.jwVector.Type.toVector(B)
             T = Cast.toNumber(T)
-            throw new Error("Not Implemented: Block functionality incomplete or non-existant")
+            T = Math.max(0, Math.min(1, T));
+            const resultX = A.x + T * (B.x - A.x);
+            const resultY = A.y + T * (B.y - A.y);
+            return vm.jwVector.Type.toVector([ resultX, resultY ]);
         }
 
         vectorPreset({ PRESET }, util) {
