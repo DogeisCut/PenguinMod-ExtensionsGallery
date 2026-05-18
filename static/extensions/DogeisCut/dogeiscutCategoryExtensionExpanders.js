@@ -4,8 +4,8 @@
 // By: DogeisCut <https://scratch.mit.edu/users/DogeisCut/>
 
 // Future Ideas
-// - get (costume v) as svg xml: XML
-// - get (costume v) as array buffer: Array Buffer
+// - get (costume v) as svg xml: XML - only lists vector costumes, invalid input returns blank XML
+// - get (costume v) as array buffer: Array Buffer - only lists bitmap costumes, invalid input returns blank buffer
 
 // Currently Supported Custom Types
 // - Arrays
@@ -58,7 +58,7 @@
                         extensions: ["colours_motion"],
                         hideFromPalette: !vm.jwArray,
                     },
-                    ...(!vm.jwArray ? ['---'] : []),
+                    ...(vm.jwArray ? ['---'] : []),
                     {
                         opcode: 'transform',
                         text: 'transform',
@@ -75,7 +75,7 @@
                         extensions: ["colours_motion"],
                         hideFromPalette: !vm.dogeiscutObject,
                     },
-                    ...(!vm.dogeiscutObject ? ['---'] : []),
+                    ...(vm.dogeiscutObject ? ['---'] : []),
                     {
                         opcode: 'changePositionByPosition',
                         text: 'change position by [POSITION]',
@@ -99,7 +99,7 @@
                         extensions: ["colours_motion"],
                         hideFromPalette: !vm.jwVector,
                     },
-                    ...(!vm.jwVector ? ['---'] : []),
+                    ...(vm.jwVector ? ['---'] : []),
                     {
                         opcode: 'pointTowardsPosition',
                         text: 'point towards position [POSITION]',
@@ -126,6 +126,15 @@
                         ...(vm.dogeiscutObject ? vm.dogeiscutObject.Block : {}),
                     },
                     {
+                        opcode: 'setBubbleOptionsToObject',
+                        text: 'set bubble options to [OBJECT]',
+                        arguments: {
+                            OBJECT: (vm.jwVector ? vm.jwVector.Argument : {})
+                        },
+                        extensions: ["colours_looks"],
+                        hideFromPalette: !vm.dogeiscutObject,
+                    },
+                    {
                         opcode: 'bubbleSize',
                         text: 'bubble size',
                         arguments: {
@@ -137,7 +146,7 @@
                         hideFromPalette: !vm.jwVector,
                         ...(vm.jwVector ? vm.jwVector.Block : {}),
                     },
-                    ...(!vm.jwVector ? ['---'] : []),
+                    ...(vm.jwVector ? ['---'] : []),
                     {
                         opcode: 'costumeNamesInScope',
                         text: 'costume names in [SCOPE]',
@@ -150,13 +159,22 @@
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
                     },
-                    ...(!vm.jwArray ? ['---'] : []),
+                    ...(vm.jwArray ? ['---'] : []),
                     {
                         opcode: 'spriteEffects',
                         text: 'sprite effects',
                         extensions: ["colours_looks"],
                         hideFromPalette: !vm.dogeiscutObject,
                         ...(vm.dogeiscutObject ? vm.dogeiscutObject.Block : {}),
+                    },
+                    {
+                        opcode: 'setSpriteEffectsToObject',
+                        text: 'set sprite effects to [OBJECT]',
+                        arguments: {
+                            OBJECT: (vm.jwVector ? vm.jwVector.Argument : {})
+                        },
+                        extensions: ["colours_looks"],
+                        hideFromPalette: !vm.dogeiscutObject,
                     },
                     {
                         blockType: BlockType.LABEL,
@@ -186,7 +204,7 @@
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
                     },
-                    ...(!vm.jwArray ? ['---'] : []),
+                    ...(vm.jwArray ? ['---'] : []),
                     {
                         opcode: 'soundEffects',
                         text: 'sound effects',
@@ -227,7 +245,7 @@
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
                     },
-                    ...(!vm.jwArray ? ['---'] : []),
+                    ...(vm.jwArray ? ['---'] : []),
                     {
                         opcode: 'keysDowm',
                         text: 'keys down',
@@ -242,7 +260,7 @@
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
                     },
-                    ...(!vm.jwArray ? ['---'] : []),
+                    ...(vm.jwArray ? ['---'] : []),
                     {
                         opcode: 'fingersDown',
                         text: 'fingers down',
