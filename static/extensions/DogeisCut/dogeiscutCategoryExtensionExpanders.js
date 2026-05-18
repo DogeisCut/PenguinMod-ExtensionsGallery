@@ -4,8 +4,10 @@
 // By: DogeisCut <https://scratch.mit.edu/users/DogeisCut/>
 
 // Future Ideas
-// - get (costume v) as svg xml: XML - only lists vector costumes, invalid input returns blank XML
-// - get (costume v) as array buffer: Array Buffer - only lists bitmap costumes, invalid input returns blank buffer
+// - get (costume: string v) as svg xml: XML - only lists vector costumes, invalid input returns blank XML
+// - get (costume: string v) as array buffer: Array Buffer - only lists bitmap costumes, invalid input returns blank buffer
+// - (array: Array) as vector: Vector - operator
+// - (object: Object) as vector: Vector - operator
 
 // Currently Supported Custom Types
 // - Arrays
