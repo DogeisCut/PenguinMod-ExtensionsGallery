@@ -97,7 +97,7 @@
                     ...(vm.dogeiscutObject ? ['---'] : []),
                     {
                         opcode: 'changePositionByPosition',
-                        text: '⚠ change position by [POSITION]',
+                        text: 'change position by [POSITION]',
                         arguments: {
                             POSITION: (vm.jwVector ? vm.jwVector.Argument : {})
                         },
@@ -172,7 +172,7 @@
                     ...(vm.jwArray ? ['---'] : []),
                     {
                         opcode: 'graphicEffects',
-                        text: '⚠ graphic effects',
+                        text: 'graphic effects',
                         extensions: ["colours_looks"],
                         hideFromPalette: !vm.dogeiscutObject,
                         ...(vm.dogeiscutObject ? vm.dogeiscutObject.Block : {}),
@@ -185,6 +185,17 @@
                         },
                         extensions: ["colours_looks"],
                         hideFromPalette: !vm.dogeiscutObject,
+                    },
+                    ...(vm.dogeiscutObject ? ['---'] : []),
+                    {
+                        opcode: 'changeStretchByVector',
+                        text: 'change stretch by [VECTOR]',
+                        arguments: {
+                            VECTOR: (vm.jwVector ? vm.jwVector.Argument : {})
+                        },
+                        extensions: ["colours_looks"],
+                        filter: [TargetType.SPRITE],
+                        hideFromPalette: !vm.jwVector,
                     },
                     {
                         blockType: BlockType.LABEL,
@@ -464,10 +475,18 @@
                     },
                     {
                         opcode: 'fontNames',
-                        text: '⚠ font names',
+                        text: 'font names',
                         extensions: ["colours_pen"],
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
+                    },
+                    ...(vm.jwArray ? ['---'] : []),
+                    {
+                        opcode: 'targetData',
+                        text: '(DEBUG) target data',
+                        extensions: ["colours_pen"],
+                        hideFromPalette: !vm.dogeiscutObject,
+                        ...(vm.dogeiscutObject ? vm.dogeiscutObject.Block : {}),
                     },
                 ],
                 menus: {
@@ -607,12 +626,11 @@
         setTransformToTransform({ TRANSFORM }, util) {
             TRANSFORM = vm.dogeiscutObject.Type.toObject(TRANSFORM)
             throw new Error("Not Implemented: Block functionality incomplete or non-existant")
-        
         }
 
         changePositionByPosition({ POSITION }, util) {
             POSITION = vm.jwVector.Type.toVector(POSITION)
-            throw new Error("Not Implemented: Block functionality incomplete or non-existant")
+            util.target.setXY(util.target.x + POSITION.x, util.target.y + POSITION.y)
         }
 
         glideSecsToPosition({ SECS, POSITION }, util) {
@@ -626,8 +644,8 @@
             throw new Error("Not Implemented: Block functionality incomplete or non-existant")
         }
 
-        textBubbleOptions({ SCOPE }, util) {
-            SCOPE = Cast.toString(SCOPE)
+        textBubbleOptions({ }, util) {
+            //const props = util.target._customState.Scratch.looks.props;
             throw new Error("Not Implemented: Block functionality incomplete or non-existant")
         }
 
@@ -646,12 +664,17 @@
         }
 
         graphicEffects({  }, util) {
-            throw new Error("Not Implemented: Block functionality incomplete or non-existant")
+            return vm.dogeiscutObject.Type.toObject(util.target.effects);
         }
 
         setGraphicEffectsToObject({ EFFECTS }, util) {
             EFFECTS = vm.dogeiscutObject.Type.toObject(EFFECTS)
             throw new Error("Not Implemented: Block functionality incomplete or non-existant")
+        }
+
+        changeStretchByVector({ VECTOR }, util) {
+            VECTOR = vm.jwVector.Type.toVector(VECTOR)
+            util.target.setStretch(util.target.stretch[0] + VECTOR.x, util.target.stretch[1] + VECTOR.y)
         }
 
         soundNames({ }, util) {
@@ -792,7 +815,13 @@
         }
 
         fontNames({  }, util) {
-            throw new Error("Not Implemented: Block functionality incomplete or non-existant")
+            const fonts = runtime.fontManager.getFonts();
+            return vm.jwArray.Type.toArray(fonts.map(font => font.name));
+        }
+
+        targetData({ }, util) {
+            console.log(util.target)
+            return vm.dogeiscutObject.Type.toObject(util.target);
         }
     }
 
