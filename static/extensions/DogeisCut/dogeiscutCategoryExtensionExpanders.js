@@ -138,11 +138,6 @@
                     {
                         opcode: 'textBubbleOptions',
                         text: '⚠ text bubble options',
-                        arguments: {
-                            SCOPE: {
-                                menu: 'spriteScope',
-                            },
-                        },
                         extensions: ["colours_looks"],
                         filter: [TargetType.SPRITE],
                         hideFromPalette: !vm.dogeiscutObject,
@@ -168,13 +163,8 @@
                     },
                     ...(vm.jwVector ? ['---'] : []),
                     {
-                        opcode: 'costumeNamesInScope',
-                        text: '⚠ costume names in [SCOPE]',
-                        arguments: {
-                            SCOPE: {
-                                menu: 'spriteScope',
-                            },
-                        },
+                        opcode: 'costumeNames',
+                        text: 'costume names',
                         extensions: ["colours_looks"],
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
@@ -201,25 +191,15 @@
                         text: 'Sounds',
                     },
                     {
-                        opcode: 'soundNamesInScope',
-                        text: '⚠ sound names in [SCOPE]',
-                        arguments: {
-                            SCOPE: {
-                                menu: 'spriteScope',
-                            },
-                        },
+                        opcode: 'soundNames',
+                        text: 'sound names',
                         extensions: ["colours_sounds"],
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
                     },
                     {
-                        opcode: 'soundsPlayingInScope',
-                        text: '⚠ sounds playing in [SCOPE]',
-                        arguments: {
-                            SCOPE: {
-                                menu: 'spriteScope',
-                            },
-                        },
+                        opcode: 'soundsPlaying',
+                        text: '⚠ sounds playing',
                         extensions: ["colours_sounds"],
                         hideFromPalette: !vm.jwArray,
                         ...(vm.jwArray ? vm.jwArray.Block : {}),
@@ -507,18 +487,6 @@
                             }
                         ]
                     },
-                    spriteScope: {
-                        acceptReporters: false,
-                        items: [{
-                                text: 'sprite',
-                                value: 'sprite'
-                            },
-                            {
-                                text: 'project',
-                                value: 'project'
-                            }
-                        ]
-                    },
                     vectorPresets: {
                         acceptReporters: false,
                         items: [{
@@ -672,9 +640,9 @@
             throw new Error("Not Implemented: Block functionality incomplete or non-existant")
         }
 
-        costumeNamesInScope({ SCOPE }, util) {
-            SCOPE = Cast.toString(SCOPE)
-            throw new Error("Not Implemented: Block functionality incomplete or non-existant")
+        costumeNames({ }, util) {
+            const costumes = util.target.getCostumes();
+            return vm.jwArray.Type.toArray(costumes.map(costume => costume.name));
         }
 
         graphicEffects({  }, util) {
@@ -686,13 +654,12 @@
             throw new Error("Not Implemented: Block functionality incomplete or non-existant")
         }
 
-        soundNamesInScope({ SCOPE }, util) {
-            SCOPE = Cast.toString(SCOPE)
-            throw new Error("Not Implemented: Block functionality incomplete or non-existant")
+        soundNames({ }, util) {
+            const sounds = util.target.getSounds();
+            return vm.jwArray.Type.toArray(sounds.map(sound => sound.name));
         }
 
-        soundsPlayingInScope({ SCOPE }, util) {
-            SCOPE = Cast.toString(SCOPE)
+        soundsPlaying({ }, util) {
             throw new Error("Not Implemented: Block functionality incomplete or non-existant")
         }
 
